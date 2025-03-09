@@ -1,4 +1,13 @@
 package info.setmy.ann;
 
-public class Layer extends LayerElement {
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+
+@Getter
+@Builder(toBuilder = true)
+@AllArgsConstructor
+public class Layer {
+
+    private final Node[] nodes;
 }

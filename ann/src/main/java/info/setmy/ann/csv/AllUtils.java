@@ -1,5 +1,6 @@
 package info.setmy.ann.csv;
 
+import info.setmy.ann.Node;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.csv.CSVParser;
 
@@ -91,5 +92,23 @@ public class AllUtils {
 
         System.out.println("\nTest data (" + testData.size() + "):");
         testData.forEach(System.out::println);
+    }
+
+    public Node[] createNodes(int size, Node.Type type) {
+        Node[] result = new Node[size];
+        Random random = new Random();
+        for (int i = 0; i < size; i++) {
+            double randomBias = -1 + 2 * random.nextDouble();
+            double[] weights = new double[size];
+            for (int j = 0; j < size; j++) {
+                weights[j] = -1 + 2 * random.nextDouble();
+            }
+            result[i] = Node.builder()
+                    .type(type)
+                    .bias(randomBias)
+                    .weights(weights)
+                    .build();
+        }
+        return result;
     }
 }
