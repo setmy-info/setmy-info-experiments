@@ -1,6 +1,5 @@
 package info.setmy.ann;
 
-import info.setmy.ann.csv.CSVRecord;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,15 +30,15 @@ public class Network {
         return layers.add(layer);
     }
 
-    public void fit(List<CSVRecord> trainData, List<CSVRecord> testData, int epochs) {
+    public void fit(double[][] trainData, double[][] testData, int epochs) {
         // TODO : forward and backward propa.
         for (int epoch = 0; epoch < epochs; epoch++) {
             System.out.println("Epoch " + (epoch + 1) + " / " + epochs);
-            for (CSVRecord record : trainData) {
+            for (double[] record : trainData) {
                 // TODO: Forward pass (in -> out)
-                forwardPropagation(record.getLayerData());
+                forwardPropagation(record);
                 // TODO: Backpropagation (error -> lower weight)
-                backPropagation(record.getLayerData());
+                backPropagation(record);
             }
             // For case of need to monitor and check precision, then test on test data with network
             evaluate(testData);
@@ -77,7 +76,7 @@ public class Network {
         // TODO: Backpropaga logic
     }
 
-    private void evaluate(List<CSVRecord> testData) {
+    private void evaluate(double[][] testData) {
         // TODO: Evaluation (for example prediction and precision). Eval network precision with test data.
     }
 }

@@ -112,4 +112,12 @@ public class AllUtils {
         }
         return nodes;
     }
+
+    public double[][] toFitData(List<CSVRecord> trainData) {
+        var result = new double[trainData.size()][];
+        for (int i = 0; i < trainData.size(); i++) {
+            result[i] = trainData.get(i).getLayerData();
+        }
+        return result;
+    }
 }

@@ -47,7 +47,7 @@ public class Application {
             );
             List<CSVRecord> trainData = split[0];
             List<CSVRecord> testData = split[1];
-            network.fit(trainData, testData, 100);
+            network.fit(toFitData(trainData), toFitData(testData), 100);
         } catch (IOException e) {
             e.printStackTrace();
         }
