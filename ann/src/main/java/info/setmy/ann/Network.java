@@ -18,8 +18,14 @@ public class Network {
     private Layer outputLayer;
 
     public boolean addLayer(Layer layer) {
+        layer = layer.toBuilder()
+                .previous(outputLayer)
+                .build();
         if (layers.isEmpty()) {
             inputLayer = layer;
+        }
+        if (outputLayer != null) {
+            outputLayer.setNext(layer);
         }
         outputLayer = layer;
         return layers.add(layer);

@@ -19,16 +19,30 @@ public class Application {
             // Input layer
             network.addLayer(
                     Layer.builder()
-                            .nodes(createNodes(4, RELU))
+                            .name("Input layer")
+                            .nodes(createNodes(4, RELU, 4))
                             .build()
             );
 
             // Hidden layers
+            network.addLayer(
+                    Layer.builder()
+                            .name("Hidden layer 1")
+                            .nodes(createNodes(8, RELU, 4))
+                            .build()
+            );
+            network.addLayer(
+                    Layer.builder()
+                            .name("Hidden layer 2")
+                            .nodes(createNodes(8, RELU, 8))
+                            .build()
+            );
 
             // Output layer
             network.addLayer(
                     Layer.builder()
-                            .nodes(new Node[3])// How many classes in iris data
+                            .name("Output Layer")
+                            .nodes(createNodes(3, RELU, 8))// How many classes in iris data
                             .build()
             );
             List<CSVRecord> trainData = split[0];
