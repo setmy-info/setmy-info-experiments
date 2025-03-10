@@ -32,8 +32,4 @@ public class Node {
         };
     }
 
-    public enum Type {
-        SIGMOID,
-        RELU;
-    }
 }

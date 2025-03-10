@@ -1,7 +1,7 @@
 package info.setmy.ann.csv;
 
 import info.setmy.ann.Node;
-import info.setmy.ann.Node.Type;
+import info.setmy.ann.Type;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.csv.CSVParser;
 

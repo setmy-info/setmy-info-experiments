@@ -16,6 +16,10 @@ public class Network {
     private Layer inputLayer;
     private Layer outputLayer;
 
+    public void configure(NetworkConfig networkConfig) {
+        // TODO: build up network
+    }
+
     public boolean addLayer(Layer layer) {
         layer = layer.toBuilder()
                 .previous(outputLayer)

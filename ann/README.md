@@ -11,9 +11,9 @@
 
 Where:
 
-o = f(i) = s((Σi[n]w[n]) + b)
+o = s((Σi[n]w[n]) + b)
 
-$$ o = f(i) = s\left(\sum_{n} i_n w_n + b\right) $$
+$$ o = σ\left(\sum_{n} i_n w_n + b\right) $$
 - 
 
 - i = input
@@ -21,7 +21,7 @@ $$ o = f(i) = s\left(\sum_{n} i_n w_n + b\right) $$
 - w = weight
 - b = bias
 - n = index, element number
-- s = sigmoid function
+- s, σ = sigmoid function
 
 # Documentation
 

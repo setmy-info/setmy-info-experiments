@@ -5,7 +5,7 @@ import info.setmy.ann.csv.CSVRecord;
 import java.io.IOException;
 import java.util.List;
 
-import static info.setmy.ann.Node.Type.RELU;
+import static info.setmy.ann.Type.RELU;
 import static info.setmy.ann.csv.AllUtils.*;
 
 public class Application {
