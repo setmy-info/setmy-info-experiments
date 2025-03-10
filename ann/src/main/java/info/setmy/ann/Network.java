@@ -46,74 +46,11 @@ public class Network {
     }
 
     private void forwardPropagation(double[] layerData) {
-        // Input Layer
-        for (int i = 0; i < inputLayer.getNodes().length; i++) {
-            inputLayer.getNodes()[i].setValue(layerData[i]);  // TODO : korda teha.Sisendi väärtus
-        }
-
-        // All other layes
-        for (int i = 1; i < layers.size(); i++) {
-            Layer currentLayer = layers.get(i);
-            Layer previousLayer = layers.get(i - 1);
-
-            // Calculate for every node in next layer
-            for (int j = 0; j < currentLayer.getNodes().length; j++) {
-                Node node = currentLayer.getNodes()[j];
-                double nodeValue = 0;
-
-                // Calc for every node in previous layer with weights
-                for (int k = 0; k < previousLayer.getNodes().length; k++) {
-                    nodeValue += previousLayer.getNodes()[k].getValue() * node.getWeights()[k];
-                }
-
-                nodeValue += node.getBias(); // Add bias
-                //node.setValue(node.activate()); // Calc activation function
-                node.setValue(nodeValue);
-                node.setValue(node.activate(nodeValue));
-            }
-        }
+        // TODO: Forwardpropa
     }
 
     private void backPropagation(double[] layerData) {
-        // TODO: Backpropaga logic
-        // Calculate output layer error
-        for (int i = 0; i < outputLayer.getNodes().length; i++) {
-            Node node = outputLayer.getNodes()[i];
-            double error = layerData[i] - node.getValue();
-            node.setDelta(error * node.derivative());
-        }
-
-        // Propagate error backwards
-        for (int i = layers.size() - 2; i >= 0; i--) {
-            Layer currentLayer = layers.get(i);
-            Layer nextLayer = layers.get(i + 1);
-
-            for (int j = 0; j < currentLayer.getNodes().length; j++) {
-                Node node = currentLayer.getNodes()[j];
-                double errorSum = 0;
-
-                for (Node nextNode : nextLayer.getNodes()) {
-                    errorSum += nextNode.getWeights()[j] * nextNode.getDelta();
-                }
-                node.setDelta(errorSum * node.derivative());
-            }
-        }
-
-        // Update weights and biases
-        for (int i = 1; i < layers.size(); i++) {
-            Layer currentLayer = layers.get(i);
-            Layer previousLayer = layers.get(i - 1);
-
-            for (int j = 0; j < currentLayer.getNodes().length; j++) {
-                Node node = currentLayer.getNodes()[j];
-                for (int k = 0; k < previousLayer.getNodes().length; k++) {
-                    double newWeight = node.getWeights()[k] + learningRate * node.getDelta() * previousLayer.getNodes()[k].getValue();
-                    node.getWeights()[k] = newWeight;
-                }
-                double newBias = node.getBias() + learningRate * node.getDelta();
-                node.setBias(newBias);
-            }
-        }
+        // TODO: Backpropalogic
     }
 
     private void evaluate(double[][] testData) {
