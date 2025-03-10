@@ -17,18 +17,18 @@ public class Node {
     private double delta;
     private final Type type;
 
-    public double sigmoid() {
-        return 1.0 / (1.0 + Math.exp(-value));
+    public double sigmoid(double input) {
+        return 1.0 / (1.0 + Math.exp(-input));
     }
 
-    public double relu() {
-        return Math.max(0, value);
+    public double relu(double input) {
+        return Math.max(0, input);
     }
 
-    public double activate() {
+    public double activate(double input) {
         return switch (type) {
-            case RELU -> relu();
-            default -> sigmoid();//sigmoid default
+            case RELU -> relu(input);
+            default -> sigmoid(input);//sigmoid default
         };
     }
 
