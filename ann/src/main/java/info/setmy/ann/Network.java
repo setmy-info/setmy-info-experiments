@@ -1,11 +1,14 @@
 package info.setmy.ann;
 
+import info.setmy.ann.config.NetworkConfig;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static info.setmy.ann.AllUtils.createNodes;
 
 @Getter
 @NoArgsConstructor
@@ -16,8 +19,23 @@ public class Network {
     private Layer inputLayer;
     private Layer outputLayer;
 
-    public void configure(NetworkConfig networkConfig) {
-        // TODO: build up network
+    // For forward
+    private Layer current;
+
+    public void configure(final NetworkConfig networkConfig) {
+        Layer previousLayer = null;
+        double[] previousOutputs = null;
+        for (var layerConfig : networkConfig.getLayersConfig()) {
+            int prevSize = previousLayer == null ? layerConfig.getSize() : previousLayer.getNeurons().length;
+            Neuron[] neurons = createNodes(layerConfig.getSize(), layerConfig.getType(), prevSize, previousOutputs);
+            Layer layer = Layer.builder()
+                    .name(layerConfig.getName())
+                    .neurons(neurons)
+                    .build();
+            addLayer(layer);
+            previousOutputs = neurons[0].getOutputs();// All neurons have same array for output
+            previousLayer = layer;
+        }
     }
 
     public boolean addLayer(Layer layer) {
@@ -39,21 +57,41 @@ public class Network {
         for (int epoch = 0; epoch < epochs; epoch++) {
             System.out.println("Epoch " + (epoch + 1) + " / " + epochs);
             for (double[] record : trainData) {
-                // TODO: Forward pass (in -> out)
-                forwardPropagation(record);
-                // TODO: Backpropagation (error -> lower weight)
-                backPropagation(record);
+                forwardAndBackwardPropagation(record);
             }
             // For case of need to monitor and check precision, then test on test data with network
             evaluate(testData);
         }
     }
 
-    private void forwardPropagation(double[] layerData) {
-        // TODO: Forwardpropa
+    private void forwardAndBackwardPropagation(double[] record) {
+        forward(record);
+        // TODO: Backpropagation (error -> lower weight)
+        backward(record);
     }
 
-    private void backPropagation(double[] layerData) {
+    private void forward(double[] record) {
+        forwardFirst(record);
+        forwardOthers(record);
+    }
+
+    private void forwardFirst(double[] record) {
+        current = inputLayer;
+        for (Neuron neuron : current.getNeurons()) {
+            neuron.setInputs(record);
+        }
+        current.forward();
+        current = current.getNext();
+    }
+
+    private void forwardOthers(double[] record) {
+        while (current != null) {
+            current.forward();
+            current = current.getNext();
+        }
+    }
+
+    private void backward(double[] record) {
         // TODO: Backpropalogic
     }
 

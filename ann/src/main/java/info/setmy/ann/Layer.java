@@ -12,7 +12,13 @@ import lombok.Setter;
 public class Layer {
 
     private final String name;
-    private final Node[] nodes;
     private final Layer previous;
+    private final Neuron[] neurons;
     private Layer next;
+
+    public void forward() {
+        for (var neuron : neurons) {
+            neuron.forward();
+        }
+    }
 }
