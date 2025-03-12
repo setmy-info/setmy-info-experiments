@@ -5,6 +5,7 @@ public record CSVRecord(
         double sepalWidth,
         double petalLength,
         double petalWidth,
+        String className,
         int classType
 ) {
     public double[] getLayerData() {

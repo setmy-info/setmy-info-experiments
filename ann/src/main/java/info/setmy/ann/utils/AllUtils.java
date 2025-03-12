@@ -1,7 +1,6 @@
-package info.setmy.ann;
+package info.setmy.ann.utils;
 
 import info.setmy.ann.csv.CSVRecord;
-import info.setmy.ann.functions.ActivationFunction;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.csv.CSVParser;
 
@@ -15,8 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import static info.setmy.ann.functions.ReluFunction.RELU_FUNCTION;
-import static info.setmy.ann.functions.SigmoidFunction.SIGMOID_FUNCTION;
 import static java.util.Collections.shuffle;
 import static org.apache.commons.csv.CSVFormat.DEFAULT;
 
@@ -42,6 +39,7 @@ public class AllUtils {
                         Double.parseDouble(record.get(1)),
                         Double.parseDouble(record.get(2)),
                         Double.parseDouble(record.get(3)),
+                        record.get(4),
                         toClassType(record.get(4))
                 );
                 records.add(csvRecord);
@@ -112,28 +110,6 @@ public class AllUtils {
         testData.forEach(System.out::println);
     }
 
-    public static Neuron[] createNodes(int layerSize, Type type, int previousLayerSize, double[] previousOutputsAsInputs) {
-        Neuron[] neurons = new Neuron[layerSize];
-        double[] outputs = new double[layerSize];
-        ActivationFunction activationFunction = getActivationFunction(type);
-        for (int i = 0; i < layerSize; i++) {
-            double[] weights = new double[previousLayerSize];
-            for (int w = 0; w < previousLayerSize; w++) {
-                weights[w] = -1 + 2 * nextRandomDouble();
-            }
-            double bias = -1 + 2 * nextRandomDouble();
-            neurons[i] = Neuron.builder()
-                    .index(i)
-                    .activationFunction(activationFunction)
-                    .weights(weights)
-                    .bias(bias)
-                    .inputs(previousOutputsAsInputs)
-                    .outputs(outputs)
-                    .build();
-        }
-        return neurons;
-    }
-
     public static double nextRandomDouble() {
         return RANDOM.nextDouble();
     }
@@ -144,12 +120,5 @@ public class AllUtils {
             result[i] = trainData.get(i).getLayerData();
         }
         return result;
-    }
-
-    public static ActivationFunction getActivationFunction(Type type) {
-        return switch (type) {
-            case RELU -> RELU_FUNCTION;
-            default -> SIGMOID_FUNCTION;//sigmoid default
-        };
     }
 }

@@ -1,6 +1,6 @@
 package info.setmy.ann.config;
 
-import info.setmy.ann.Type;
+import info.setmy.ann.FunctionType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,5 +14,5 @@ public class LayerConfig {
 
     private final String name;
     private final int size;
-    private final Type type;
+    private final FunctionType functionType;
 }

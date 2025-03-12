@@ -7,12 +7,12 @@ import info.setmy.ann.csv.CSVRecord;
 import java.io.IOException;
 import java.util.List;
 
-import static info.setmy.ann.AllUtils.groupByClassType;
-import static info.setmy.ann.AllUtils.printData;
-import static info.setmy.ann.AllUtils.readAllRecords;
-import static info.setmy.ann.AllUtils.splitRandomlyData;
-import static info.setmy.ann.AllUtils.toFitData;
-import static info.setmy.ann.Type.RELU;
+import static info.setmy.ann.FunctionType.RELU;
+import static info.setmy.ann.utils.AllUtils.groupByClassType;
+import static info.setmy.ann.utils.AllUtils.printData;
+import static info.setmy.ann.utils.AllUtils.readAllRecords;
+import static info.setmy.ann.utils.AllUtils.splitRandomlyData;
+import static info.setmy.ann.utils.AllUtils.toFitData;
 
 public class Application {
 
@@ -21,22 +21,22 @@ public class Application {
                 .add(LayerConfig.builder()
                         .name("Input layer")
                         .size(4)
-                        .type(RELU)
+                        .functionType(RELU)
                         .build()
                 ).add(LayerConfig.builder()
-                        .name("idden layer 1")
+                        .name("Hidden layer 1")
                         .size(8)
-                        .type(RELU)
+                        .functionType(RELU)
                         .build())
                 .add(LayerConfig.builder()
-                        .name("idden layer 2")
+                        .name("Hidden layer 2")
                         .size(8)
-                        .type(RELU)
+                        .functionType(RELU)
                         .build())
                 .add(LayerConfig.builder()
                         .name("Output layer")
                         .size(3)
-                        .type(RELU)
+                        .functionType(RELU)
                         .build())
                 .makeFinal();
         try {
