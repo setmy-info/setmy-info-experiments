@@ -70,7 +70,7 @@ public class AllUtils {
         double foundValue = -1.0;
         int result = 0;
         for (int i = 0; i < outputs.length; i++) {
-            if (foundValue <= outputs[i]) {
+            if (foundValue < outputs[i]) {
                 foundValue = outputs[i];
                 result = i;
             }
