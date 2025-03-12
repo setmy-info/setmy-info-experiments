@@ -66,6 +66,18 @@ public class AllUtils {
         };
     }
 
+    public static int getPredictedClass(double[] outputs) {
+        double foundValue = -1.0;
+        int result = 0;
+        for (int i = 0; i < outputs.length; i++) {
+            if (foundValue <= outputs[i]) {
+                foundValue = outputs[i];
+                result = i;
+            }
+        }
+        return result;
+    }
+
     public static Map<Integer, List<CSVRecord>> groupByClassType(List<CSVRecord> records) {
         Map<Integer, List<CSVRecord>> groupedRecords = new HashMap<>();
         for (CSVRecord record : records) {
@@ -88,15 +100,6 @@ public class AllUtils {
             trainData.addAll(records.subList(testSize, records.size()));
         }
         return new List[]{trainData, testData};
-    }
-
-    public static double[] toLayerData(CSVRecord record) {
-        return new double[]{
-                record.sepalLength(),
-                record.sepalWidth(),
-                record.petalLength(),
-                record.petalWidth()
-        };
     }
 
     public static void printData(List<CSVRecord>[] split) {

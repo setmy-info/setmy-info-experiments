@@ -6,13 +6,15 @@ import lombok.RequiredArgsConstructor;
 
 import static info.setmy.ann.functions.ReluFunction.RELU_FUNCTION;
 import static info.setmy.ann.functions.SigmoidFunction.SIGMOID_FUNCTION;
+import static info.setmy.ann.functions.SoftmaxFunction.SOFTMAX_FUNCTION;
 
 @Getter
 @RequiredArgsConstructor
 public enum FunctionType {
 
     SIGMOID(SIGMOID_FUNCTION),
-    RELU(RELU_FUNCTION);
+    RELU(RELU_FUNCTION),
+    SOFTMAX(SOFTMAX_FUNCTION);
 
     private final ActivationFunction activationFunction;
 }
