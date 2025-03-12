@@ -7,6 +7,7 @@ import info.setmy.ann.csv.CSVRecord;
 import java.io.IOException;
 import java.util.List;
 
+import static info.setmy.ann.FunctionType.PASS;
 import static info.setmy.ann.FunctionType.RELU;
 import static info.setmy.ann.utils.AllUtils.groupByClassType;
 import static info.setmy.ann.utils.AllUtils.printData;
@@ -21,7 +22,7 @@ public class Application {
                 .add(LayerConfig.builder()
                         .name("Input layer")
                         .size(4)
-                        .functionType(RELU)
+                        .functionType(PASS)
                         .build()
                 ).add(LayerConfig.builder()
                         .name("Hidden layer 1")

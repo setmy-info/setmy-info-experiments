@@ -15,10 +15,18 @@ public class Layer {
     private final Layer previous;
     private final Neuron[] neurons;
     private Layer next;
+    // TODO : moved here from neurons
+    private double[] outputs;
 
     public void forward() {
-        for (var neuron : neurons) {
-            neuron.forward();
+        if(previous == null) {
+            for (var neuron : neurons) {
+                outputs[neuron.getIndex()] = neuron.getInputs()[neuron.getIndex()];
+            }
+        } else {
+            for (var neuron : neurons) {
+                outputs[neuron.getIndex()] = neuron.forward();
+            }
         }
     }
 }

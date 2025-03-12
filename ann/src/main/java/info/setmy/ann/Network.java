@@ -1,5 +1,6 @@
 package info.setmy.ann;
 
+import info.setmy.ann.config.LayerConfig;
 import info.setmy.ann.config.NetworkConfig;
 import info.setmy.ann.functions.ActivationFunction;
 import lombok.AllArgsConstructor;
@@ -28,18 +29,24 @@ public class Network {
         double[] previousOutputs = null;
         for (var layerConfig : networkConfig.getLayersConfig()) {
             int prevSize = previousLayer == null ? layerConfig.getSize() : previousLayer.getNeurons().length;
-            Neuron[] neurons = createNodes(layerConfig.getSize(), layerConfig.getFunctionType(), prevSize, previousOutputs);
+            //Neuron[] neurons = createNodes(layerConfig.getSize(), layerConfig.getFunctionType(), prevSize, previousOutputs, layerConfig);
+            Layer layer = createNodes(prevSize, previousOutputs, layerConfig);
+            /*
             Layer layer = Layer.builder()
                     .name(layerConfig.getName())
                     .neurons(neurons)
                     .build();
+            */
             addLayer(layer);
-            previousOutputs = neurons[0].getOutputs();// All neurons have same array for output
+            //previousOutputs = neurons[0].getOutputs();// All neurons have same array for output
+            previousOutputs = layer.getOutputs();// All neurons have same array for output
             previousLayer = layer;
         }
     }
 
-    private Neuron[] createNodes(int layerSize, FunctionType functionType, int previousLayerSize, double[] previousOutputsAsInputs) {
+    private Layer createNodes(int previousLayerSize, double[] previousOutputsAsInputs, LayerConfig layerConfig) {
+        int layerSize = layerConfig.getSize();
+        FunctionType functionType = layerConfig.getFunctionType();
         Neuron[] neurons = new Neuron[layerSize];
         double[] outputs = new double[layerSize];
         ActivationFunction activationFunction = functionType.getActivationFunction();
@@ -55,10 +62,16 @@ public class Network {
                     .weights(weights)
                     .bias(bias)
                     .inputs(previousOutputsAsInputs)
-                    .outputs(outputs)
+                    //.outputs(outputs)
                     .build();
         }
-        return neurons;
+        Layer layer = Layer.builder()
+                .name(layerConfig.getName())
+                .neurons(neurons)
+                .outputs(outputs)
+                .build();
+        return layer;
+        //return neurons;
     }
 
     public boolean addLayer(Layer layer) {

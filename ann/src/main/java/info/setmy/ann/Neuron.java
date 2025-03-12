@@ -20,13 +20,15 @@ public class Neuron {
     private double[] weights;
     private double bias;
 
-    private double[] outputs;
+    //@Deprecated//Do be voed out to Layers
+    //private double[] outputs;
 
-    public void forward() {
+    public double forward() {
         if (inputs.length != weights.length) {
             throw new RuntimeException("Neurons must have the same length in inputs and weights");
         }
-        outputs[index] = activationFunction.func(sum() + bias);
+        //outputs[index] = activationFunction.func(sum() + bias);
+        return activationFunction.func(inputs[index]);
     }
 
     private double sum() {
