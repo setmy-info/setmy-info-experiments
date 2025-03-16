@@ -25,15 +25,29 @@ public class Network {
 
     public void configure(final NetworkConfig networkConfig) {
         Layer previousLayer = null;
-        for (var layerConfig : networkConfig.getLayersConfig()) {
-            int prevSize = previousLayer == null ? layerConfig.size() : previousLayer.getNeurons().length;
-            Layer layer = createLayer(prevSize, layerConfig);
+        for (LayerConfig currentLayerConfig : networkConfig.getLayersConfig()) {
+            int previousLayerSize = previousLayer != null ? previousLayer.getSize() : currentLayerConfig.size();
+            Layer layer = createLayer(previousLayerSize, currentLayerConfig);
             addLayer(layer);
             previousLayer = layer;
         }
     }
 
     private Layer createLayer(int previousLayerSize, LayerConfig layerConfig) {
+        boolean isInputLayer = layerConfig.functionType() == null; //first input layer should not have function set.
+        Neuron[] neurons = isInputLayer ? null : createNeurons(previousLayerSize, layerConfig);
+        Layer layer = Layer.builder()
+                .name(layerConfig.name())
+                .size(layerConfig.size())
+                .neurons(neurons)
+                // first layer output is null (it is set from train and test data every time again) and first input layer should not have function set.
+                // Other have to set it by number of neurons
+                .outputs(isInputLayer ? null : new double[layerConfig.size()])
+                .build();
+        return layer;
+    }
+
+    private Neuron[] createNeurons(int previousLayerSize, LayerConfig layerConfig) {
         int layerSize = layerConfig.size();
         FunctionType functionType = layerConfig.functionType();
         Neuron[] neurons = new Neuron[layerSize];
@@ -52,12 +66,7 @@ public class Network {
                     .bias(bias)
                     .build();
         }
-        Layer layer = Layer.builder()
-                .name(layerConfig.name())
-                .neurons(neurons)
-                //.outputs(outputs) // TODO: first layer output is null (it is set from train and test data), other have to set it by number of neurons
-                .build();
-        return layer;
+        return neurons;
     }
 
     public boolean addLayer(Layer layer) {
@@ -92,10 +101,10 @@ public class Network {
 
     private void forward(double[] record) {
         inputLayer.setOutputs(record);
-        Layer currentLayer = inputLayer.getNext();//Starting from first (hidden layer)
+        Layer currentLayer = inputLayer;//inputLayer.getNext();//Starting from first (hidden layer)
         while (currentLayer != null) {
 
-            currentLayer = inputLayer.getNext();
+            currentLayer = currentLayer.getNext();
         }
         // TODO:
     }

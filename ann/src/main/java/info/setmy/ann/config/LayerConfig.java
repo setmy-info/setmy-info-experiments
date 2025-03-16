@@ -9,5 +9,4 @@ public record LayerConfig(
         int size,
         FunctionType functionType
 ) {
-
 }

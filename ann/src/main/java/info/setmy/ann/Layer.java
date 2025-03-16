@@ -12,6 +12,7 @@ import lombok.Setter;
 public class Layer {
 
     private final String name;
+    private final int size;
     private final Layer previous;
     private Layer next;
     private final Neuron[] neurons;
