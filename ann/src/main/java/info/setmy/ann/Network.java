@@ -122,7 +122,7 @@ public class Network {
     }
 
     private void backward(PredictionResult record) {
-        // TODO: Backpropalogic
+        // TODO: Back propalogic
     }
 
     private void evaluate(double[][] testData) {
