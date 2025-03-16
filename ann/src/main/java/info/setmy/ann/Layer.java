@@ -13,13 +13,7 @@ public class Layer {
 
     private final String name;
     private final Layer previous;
-    private final Neuron[] neurons;
     private Layer next;
+    private final Neuron[] neurons;
     private double[] outputs;
-
-    public void forward() {
-        for (var neuron : neurons) {
-            outputs[neuron.getIndex()] = neuron.forward();
-        }
-    }
 }

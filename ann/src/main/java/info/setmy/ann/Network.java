@@ -25,21 +25,18 @@ public class Network {
 
     public void configure(final NetworkConfig networkConfig) {
         Layer previousLayer = null;
-        double[] previousOutputs = null;
         for (var layerConfig : networkConfig.getLayersConfig()) {
             int prevSize = previousLayer == null ? layerConfig.size() : previousLayer.getNeurons().length;
-            Layer layer = createLayer(prevSize, previousOutputs, layerConfig);
+            Layer layer = createLayer(prevSize, layerConfig);
             addLayer(layer);
-            previousOutputs = layer.getOutputs();
             previousLayer = layer;
         }
     }
 
-    private Layer createLayer(int previousLayerSize, double[] previousOutputsAsInputs, LayerConfig layerConfig) {
+    private Layer createLayer(int previousLayerSize, LayerConfig layerConfig) {
         int layerSize = layerConfig.size();
         FunctionType functionType = layerConfig.functionType();
         Neuron[] neurons = new Neuron[layerSize];
-        double[] outputs = new double[layerSize];
         for (int i = 0; i < layerSize; i++) {
             double[] weights = new double[previousLayerSize];
             for (int w = 0; w < previousLayerSize; w++) {
@@ -53,13 +50,12 @@ public class Network {
                     )
                     .weights(weights)
                     .bias(bias)
-                    .inputs(previousOutputsAsInputs)
                     .build();
         }
         Layer layer = Layer.builder()
                 .name(layerConfig.name())
                 .neurons(neurons)
-                .outputs(outputs)
+                //.outputs(outputs) // TODO: first layer output is null (it is set from train and test data), other have to set it by number of neurons
                 .build();
         return layer;
     }
@@ -95,6 +91,12 @@ public class Network {
     }
 
     private void forward(double[] record) {
+        inputLayer.setOutputs(record);
+        Layer currentLayer = inputLayer.getNext();//Starting from first (hidden layer)
+        while (currentLayer != null) {
+
+            currentLayer = inputLayer.getNext();
+        }
         // TODO:
     }
 
