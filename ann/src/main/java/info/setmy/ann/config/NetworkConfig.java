@@ -18,8 +18,7 @@ public class NetworkConfig {
     private final List<LayerConfig> layersConfig = new ArrayList<>();
 
     public NetworkConfig add(LayerConfig layerConfig) {
-        this.layersConfig.add(layerConfig);
-
+        layersConfig.add(layerConfig);
         return this;
     }
 

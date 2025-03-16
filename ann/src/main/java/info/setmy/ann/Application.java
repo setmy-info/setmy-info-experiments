@@ -6,8 +6,8 @@ import info.setmy.ann.csv.CSVRecord;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
-import static info.setmy.ann.FunctionType.PASS;
 import static info.setmy.ann.FunctionType.RELU;
 import static info.setmy.ann.utils.AllUtils.groupByClassType;
 import static info.setmy.ann.utils.AllUtils.printData;
@@ -18,38 +18,41 @@ import static info.setmy.ann.utils.AllUtils.toFitData;
 public class Application {
 
     public static void main(String[] args) {
-        var networkConfig = NetworkConfig.builder().build()
-                .add(LayerConfig.builder()
-                        .name("Input layer")
-                        .size(4)
-                        .functionType(PASS)
-                        .build()
-                ).add(LayerConfig.builder()
-                        .name("Hidden layer 1")
-                        .size(8)
-                        .functionType(RELU)
-                        .build())
-                .add(LayerConfig.builder()
-                        .name("Hidden layer 2")
-                        .size(8)
-                        .functionType(RELU)
-                        .build())
-                .add(LayerConfig.builder()
-                        .name("Output layer")
-                        .size(3)
-                        .functionType(RELU)
-                        .build())
-                .makeFinal();
+
         try {
-            List<CSVRecord>[] split = splitRandomlyData(groupByClassType(readAllRecords("./src/test/resources/iris.zip/iris.data")));
+            Map<Integer, List<CSVRecord>> groupedRecords = groupByClassType(readAllRecords("./src/test/resources/iris.zip/iris.data"));
+            List<CSVRecord>[] split = splitRandomlyData(groupedRecords);
             printData(split);
 
+            var networkConfig = NetworkConfig.builder().build()
+                    .add(LayerConfig.builder()
+                            .name("Input layer")
+                            .size(4)
+                            .build()
+                    ).add(LayerConfig.builder()
+                            .name("Hidden layer 1")
+                            .size(8)
+                            .functionType(RELU)
+                            .build())
+                    .add(LayerConfig.builder()
+                            .name("Hidden layer 2")
+                            .size(8)
+                            .functionType(RELU)
+                            .build())
+                    .add(LayerConfig.builder()
+                            .name("Output layer")
+                            .size(groupedRecords.size())
+                            .functionType(RELU)
+                            .build())
+                    .makeFinal();
             var network = new Network();
             network.configure(networkConfig);
 
-            List<CSVRecord> trainData = split[0];
-            List<CSVRecord> testData = split[1];
-            network.fit(toFitData(trainData), toFitData(testData), 100);
+            List<CSVRecord> trainDataRecords = split[0];
+            List<CSVRecord> testDataRecords = split[1];
+            double[][] trainData = toFitData(trainDataRecords);
+            double[][] testData = toFitData(testDataRecords);
+            network.fit(trainData, testData, 100);
         } catch (IOException e) {
             e.printStackTrace();
         }

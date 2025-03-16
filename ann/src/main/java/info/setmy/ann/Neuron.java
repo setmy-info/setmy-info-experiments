@@ -14,14 +14,9 @@ public class Neuron {
 
     private final int index;
     private final ActivationFunction activationFunction;
-    // Previous layer neurons outputs
-    private double[] inputs;
-    // Neuron weights per input neuron outputs
-    private double[] weights;
+    private double[] inputs;    // Previous layer neurons outputs
+    private double[] weights;// Neuron weights per input neuron outputs
     private double bias;
-
-    //@Deprecated//Do be voed out to Layers
-    //private double[] outputs;
 
     public double forward() {
         if (inputs.length != weights.length) {

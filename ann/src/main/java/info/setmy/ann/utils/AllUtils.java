@@ -133,7 +133,7 @@ public class AllUtils {
     public static double[][] toFitData(List<CSVRecord> trainData) {
         var result = new double[trainData.size()][];
         for (int i = 0; i < trainData.size(); i++) {
-            result[i] = trainData.get(i).getLayerData();
+            result[i] = trainData.get(i).getNetworkInputData();
         }
         return result;
     }

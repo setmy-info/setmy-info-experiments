@@ -8,7 +8,7 @@ public record CSVRecord(
         String className,
         int classType
 ) {
-    public double[] getLayerData() {
+    public double[] getNetworkInputData() {
         return new double[]{
                 sepalLength,
                 sepalWidth,
