@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import static info.setmy.ann.FunctionType.RELU;
+import static info.setmy.ann.FunctionType.SIGMOID;
 import static info.setmy.ann.utils.AllUtils.groupByClassType;
 import static info.setmy.ann.utils.AllUtils.printData;
 import static info.setmy.ann.utils.AllUtils.readAllRecords;
@@ -32,17 +32,17 @@ public class Application {
                     ).add(LayerConfig.builder()
                             .name("Hidden layer 1")
                             .size(8)
-                            .functionType(RELU)
+                            .functionType(SIGMOID)
                             .build())
                     .add(LayerConfig.builder()
                             .name("Hidden layer 2")
                             .size(8)
-                            .functionType(RELU)
+                            .functionType(SIGMOID)
                             .build())
                     .add(LayerConfig.builder()
                             .name("Output layer")
                             .size(groupedRecords.size())
-                            .functionType(RELU)
+                            .functionType(SIGMOID)
                             .build())
                     .makeFinal();
             var network = new Network();

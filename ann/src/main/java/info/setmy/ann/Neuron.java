@@ -16,4 +16,21 @@ public class Neuron {
     private final ActivationFunction activationFunction;
     private double[] weights;// Neuron weights per input neuron outputs
     private double bias;
+
+    public double forward(double[] previousLayerOutputs) {
+        if (previousLayerOutputs.length != weights.length) {
+            throw new RuntimeException("Neurons weights number must be the same with previous layer outputs");
+        }
+        return activationFunction.func(sum(previousLayerOutputs) + bias);
+    }
+
+    private double sum(double[] previousLayerOutputs) {
+        double result = 0;
+        for (int i = 0; i < weights.length; i++) {
+            double input = previousLayerOutputs[i];
+            double weight = weights[i];
+            result += input * weight;
+        }
+        return result;
+    }
 }

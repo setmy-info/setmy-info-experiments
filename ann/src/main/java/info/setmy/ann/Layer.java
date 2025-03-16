@@ -17,4 +17,11 @@ public class Layer {
     private Layer next;
     private final Neuron[] neurons;
     private double[] outputs;
+
+    public void forward(double[] previousLayerOutputs) {
+        for (int i = 0; i < neurons.length; i++) {
+            Neuron neuron = neurons[i];
+            outputs[i] = neuron.forward(previousLayerOutputs);
+        }
+    }
 }

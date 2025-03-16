@@ -4,7 +4,7 @@ import static java.lang.Math.exp;
 
 public final class SigmoidFunction implements ActivationFunction {
 
-    public static final ActivationFunction SIGMOID_FUNCTION = new ReluFunction();
+    public static final ActivationFunction SIGMOID_FUNCTION = new SigmoidFunction();
 
     @Override
     public double func(double input) {

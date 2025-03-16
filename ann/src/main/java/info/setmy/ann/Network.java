@@ -101,8 +101,10 @@ public class Network {
 
     private void forward(double[] record) {
         inputLayer.setOutputs(record);
-        Layer currentLayer = inputLayer;//inputLayer.getNext();//Starting from first (hidden layer)
+        Layer currentLayer = inputLayer.getNext();//Starting from first (hidden layer)
         while (currentLayer != null) {
+            double[] previousLayerOutputs = currentLayer.getPrevious().getOutputs();
+            currentLayer.forward(previousLayerOutputs);
 
             currentLayer = currentLayer.getNext();
         }
