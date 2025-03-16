@@ -94,21 +94,20 @@ public class Network {
     }
 
     private void forwardAndBackwardPropagation(double[] record) {
-        forward(record);
+        double[] output = forward(record);
         // TODO: Backpropagation (error -> lower weight)
         backward(record);
     }
 
-    private void forward(double[] record) {
+    private double[] forward(double[] record) {
         inputLayer.setOutputs(record);
         Layer currentLayer = inputLayer.getNext();//Starting from first (hidden layer)
         while (currentLayer != null) {
             double[] previousLayerOutputs = currentLayer.getPrevious().getOutputs();
             currentLayer.forward(previousLayerOutputs);
-
             currentLayer = currentLayer.getNext();
         }
-        // TODO:
+        return outputLayer.getOutputs();
     }
 
     private void backward(double[] record) {
