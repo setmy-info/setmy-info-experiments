@@ -17,6 +17,8 @@ public class Neuron {
     private double[] weights;// Neuron weights per input neuron outputs
     private double bias;
 
+    private double delta;
+
     public double forward(double[] previousLayerOutputs) {
         if (previousLayerOutputs.length != weights.length) {
             throw new RuntimeException("Neurons weights number must be the same with previous layer outputs");

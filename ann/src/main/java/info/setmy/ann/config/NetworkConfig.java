@@ -16,6 +16,8 @@ public class NetworkConfig {
 
     @Default
     private final List<LayerConfig> layersConfig = new ArrayList<>();
+    @Default
+    private final double learningRate = 0.01;
 
     public NetworkConfig add(LayerConfig layerConfig) {
         layersConfig.add(layerConfig);

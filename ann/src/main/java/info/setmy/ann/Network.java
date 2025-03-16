@@ -22,11 +22,13 @@ public class Network {
     private final List<Layer> layers = new ArrayList<>();
     private Layer inputLayer;
     private Layer outputLayer;
+    private double learningRate;
 
     // For forward
     private Layer current;
 
     public Network configure(final NetworkConfig networkConfig) {
+        this.learningRate = networkConfig.getLearningRate();
         Layer previousLayer = null;
         for (LayerConfig currentLayerConfig : networkConfig.getLayersConfig()) {
             int previousLayerSize = previousLayer != null ? previousLayer.getSize() : currentLayerConfig.size();
@@ -87,13 +89,13 @@ public class Network {
         return layers.add(layer);
     }
 
-    public void fit(double[][] trainData, double[][] testData, CSVRecord[] trainRecords, CSVRecord[] testRecords, int epochs) {
+    public void fit(CSVRecord[] trainRecords, CSVRecord[] testRecords, int epochs) {
         for (int epoch = 0; epoch < epochs; epoch++) {
             System.out.println("Epoch " + (epoch + 1) + " / " + epochs);
             for (CSVRecord record : trainRecords) {
                 forwardAndBackwardPropagation(record);
             }
-            evaluate(testData);
+            evaluate(testRecords);
         }
     }
 
@@ -122,11 +124,54 @@ public class Network {
     }
 
     private void backward(PredictionResult record) {
-        // TODO: Back propalogic
+        double[] target = new double[outputLayer.getSize()];
+        target[record.predictedClassIndex()] = 1.0;
+
+        // Compute output layer deltas
+        for (int i = 0; i < outputLayer.getSize(); i++) {
+            Neuron neuron = outputLayer.getNeurons()[i];
+            double error = target[i] - outputLayer.getOutputs()[i];
+            neuron.setDelta(error * neuron.getActivationFunction().func(outputLayer.getOutputs()[i]));
+        }
+
+        // Backpropagate through hidden layers
+        Layer currentLayer = outputLayer.getPrevious();
+        while (currentLayer != inputLayer) {
+            Layer nextLayer = currentLayer.getNext();
+            for (int i = 0; i < currentLayer.getSize(); i++) {
+                Neuron neuron = currentLayer.getNeurons()[i];
+                double sumError = 0;
+                for (Neuron nextNeuron : nextLayer.getNeurons()) {
+                    sumError += nextNeuron.getWeights()[i] * nextNeuron.getDelta();
+                }
+                neuron.setDelta(sumError * neuron.getActivationFunction().func(currentLayer.getOutputs()[i]));
+            }
+            currentLayer = currentLayer.getPrevious();
+        }
+
+        // Update weights and biases
+        currentLayer = inputLayer.getNext();
+        while (currentLayer != null) {
+            for (Neuron neuron : currentLayer.getNeurons()) {
+                for (int j = 0; j < neuron.getWeights().length; j++) {
+                    neuron.getWeights()[j] += learningRate * neuron.getDelta() * currentLayer.getPrevious().getOutputs()[j];
+                }
+                neuron.setBias(neuron.getBias() + learningRate * neuron.getDelta());
+            }
+            currentLayer = currentLayer.getNext();
+        }
     }
 
-    private void evaluate(double[][] testData) {
-        // For case of need to monitor and check precision, then test on test data with network
-        // TODO: Evaluation (for example prediction and precision). Eval network precision with test data.
+    private void evaluate(CSVRecord[] testData) {
+        int correct = 0;
+        for (CSVRecord record : testData) {
+            double[] output = forward(record.getNetworkInputData());
+            int predictedClassIndex = getPredictedClassIndex(output);
+            if (predictedClassIndex == record.classType()) {
+                correct++;
+            }
+        }
+        double accuracy = (double) correct / testData.length * 100;
+        System.out.println("Test Accuracy: " + accuracy + "%");
     }
 }

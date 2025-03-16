@@ -13,7 +13,6 @@ import static info.setmy.ann.utils.AllUtils.groupByClassType;
 import static info.setmy.ann.utils.AllUtils.printData;
 import static info.setmy.ann.utils.AllUtils.readAllRecords;
 import static info.setmy.ann.utils.AllUtils.splitRandomlyData;
-import static info.setmy.ann.utils.AllUtils.toFitData;
 
 public class Application {
 
@@ -24,7 +23,9 @@ public class Application {
             List<CSVRecord>[] split = splitRandomlyData(groupedRecords);
             printData(split);
 
-            var networkConfig = NetworkConfig.builder().build()
+            var networkConfig = NetworkConfig.builder()
+                    .learningRate(0.01)
+                    .build()
                     .add(LayerConfig.builder()
                             .name("Input layer")
                             .size(4)
@@ -53,9 +54,7 @@ public class Application {
             List<CSVRecord> testDataRecords = split[1];
             CSVRecord[] trainRecords = trainDataRecords.toArray(new CSVRecord[trainDataRecords.size()]);
             CSVRecord[] testRecords = testDataRecords.toArray(new CSVRecord[testDataRecords.size()]);
-            double[][] trainData = toFitData(trainDataRecords);
-            double[][] testData = toFitData(testDataRecords);
-            network.fit(trainData, testData, trainRecords, testRecords, 100);
+            network.fit(trainRecords, testRecords, 100);
         } catch (IOException e) {
             e.printStackTrace();
         }
