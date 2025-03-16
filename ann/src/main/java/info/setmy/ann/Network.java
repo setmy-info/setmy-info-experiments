@@ -2,6 +2,7 @@ package info.setmy.ann;
 
 import info.setmy.ann.config.LayerConfig;
 import info.setmy.ann.config.NetworkConfig;
+import info.setmy.ann.csv.CSVRecord;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +10,9 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
+import static info.setmy.ann.utils.AllUtils.getPredictedClassIndex;
 import static info.setmy.ann.utils.AllUtils.nextRandomDouble;
+import static info.setmy.ann.utils.AllUtils.toClassName;
 
 @Getter
 @NoArgsConstructor
@@ -23,7 +26,7 @@ public class Network {
     // For forward
     private Layer current;
 
-    public void configure(final NetworkConfig networkConfig) {
+    public Network configure(final NetworkConfig networkConfig) {
         Layer previousLayer = null;
         for (LayerConfig currentLayerConfig : networkConfig.getLayersConfig()) {
             int previousLayerSize = previousLayer != null ? previousLayer.getSize() : currentLayerConfig.size();
@@ -31,6 +34,7 @@ public class Network {
             addLayer(layer);
             previousLayer = layer;
         }
+        return this;
     }
 
     private Layer createLayer(int previousLayerSize, LayerConfig layerConfig) {
@@ -83,20 +87,27 @@ public class Network {
         return layers.add(layer);
     }
 
-    public void fit(double[][] trainData, double[][] testData, int epochs) {
+    public void fit(double[][] trainData, double[][] testData, CSVRecord[] trainRecords, CSVRecord[] testRecords, int epochs) {
         for (int epoch = 0; epoch < epochs; epoch++) {
             System.out.println("Epoch " + (epoch + 1) + " / " + epochs);
-            for (double[] record : trainData) {
+            for (CSVRecord record : trainRecords) {
                 forwardAndBackwardPropagation(record);
             }
             evaluate(testData);
         }
     }
 
-    private void forwardAndBackwardPropagation(double[] record) {
-        double[] output = forward(record);
+    private void forwardAndBackwardPropagation(CSVRecord record) {
+        double[] output = forward(record.getNetworkInputData());
+        var predictedClassIndex = getPredictedClassIndex(output);
+        var predictedResult = PredictionResult.builder()
+                .input(record)
+                .output(output)
+                .predictedClassIndex(predictedClassIndex)
+                .predictedClassName(toClassName(predictedClassIndex))
+                .build();
         // TODO: Backpropagation (error -> lower weight)
-        backward(record);
+        backward(predictedResult);
     }
 
     private double[] forward(double[] record) {
@@ -110,7 +121,7 @@ public class Network {
         return outputLayer.getOutputs();
     }
 
-    private void backward(double[] record) {
+    private void backward(PredictionResult record) {
         // TODO: Backpropalogic
     }
 

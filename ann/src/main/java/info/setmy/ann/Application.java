@@ -45,14 +45,17 @@ public class Application {
                             .functionType(SIGMOID)
                             .build())
                     .makeFinal();
-            var network = new Network();
-            network.configure(networkConfig);
+
+            var network = new Network()
+                    .configure(networkConfig);
 
             List<CSVRecord> trainDataRecords = split[0];
             List<CSVRecord> testDataRecords = split[1];
+            CSVRecord[] trainRecords = trainDataRecords.toArray(new CSVRecord[trainDataRecords.size()]);
+            CSVRecord[] testRecords = testDataRecords.toArray(new CSVRecord[testDataRecords.size()]);
             double[][] trainData = toFitData(trainDataRecords);
             double[][] testData = toFitData(testDataRecords);
-            network.fit(trainData, testData, 100);
+            network.fit(trainData, testData, trainRecords, testRecords, 100);
         } catch (IOException e) {
             e.printStackTrace();
         }

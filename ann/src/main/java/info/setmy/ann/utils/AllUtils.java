@@ -1,6 +1,5 @@
 package info.setmy.ann.utils;
 
-import info.setmy.ann.ClassData;
 import info.setmy.ann.csv.CSVRecord;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.csv.CSVParser;
@@ -58,11 +57,6 @@ public class AllUtils {
         };
     }
 
-    public static ClassData getPredictedClass(double[] outputs) {
-        var index = getPredictedClassIndex(outputs);
-        return getClassData(index);
-    }
-
     public static int getPredictedClassIndex(double[] outputs) {
         double foundValue = -Double.MAX_VALUE;
         int result = 0;
@@ -75,14 +69,7 @@ public class AllUtils {
         return result;
     }
 
-    private static ClassData getClassData(int index) {
-        return ClassData.builder()
-                .index(index)
-                .name(toClassName(index))
-                .build();
-    }
-
-    private static String toClassName(int classType) {
+    public static String toClassName(int classType) {
         return switch (classType) {
             case 0 -> "Iris-setosa";
             case 1 -> "Iris-versicolor";
