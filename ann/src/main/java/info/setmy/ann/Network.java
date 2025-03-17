@@ -92,10 +92,14 @@ public class Network {
     public void fit(CSVRecord[] trainRecords, CSVRecord[] testRecords, int epochs) {
         for (int epoch = 0; epoch < epochs; epoch++) {
             System.out.println("Epoch " + (epoch + 1) + " / " + epochs);
-            for (CSVRecord record : trainRecords) {
-                forwardAndBackwardPropagation(record);
-            }
+            forwardRecords(trainRecords);
             evaluate(testRecords);
+        }
+    }
+
+    private void forwardRecords(CSVRecord[] trainRecords) {
+        for (CSVRecord record : trainRecords) {
+            forwardAndBackwardPropagation(record);
         }
     }
 
@@ -115,7 +119,7 @@ public class Network {
     private double[] forward(double[] record) {
         inputLayer.setOutputs(record);
         Layer currentLayer = inputLayer.getNext();//Starting from first (hidden layer)
-        while (currentLayer != null) {
+        while (currentLayer != null) {// TODO : until pre-last. Last should be handled differently - SoftMAX.
             double[] previousLayerOutputs = currentLayer.getPrevious().getOutputs();
             currentLayer.forward(previousLayerOutputs);
             currentLayer = currentLayer.getNext();

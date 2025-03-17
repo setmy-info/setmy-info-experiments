@@ -13,6 +13,8 @@ import lombok.Setter;
 public class Neuron {
 
     private final int index;
+    // Move out to Layer level.
+    @Deprecated
     private final ActivationFunction activationFunction;
     private double[] weights;// Neuron weights per input neuron outputs
     private double bias;
