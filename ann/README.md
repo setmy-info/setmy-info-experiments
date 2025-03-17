@@ -23,6 +23,11 @@ $$ o = σ\left(\sum_{n} i_n w_n + b\right) $$
 - n = index, element number
 - s, σ = sigmoid function
 
+TODO: check correctness
+
+$$ z_j = exp\left(\sum_{n} i_n w_n + b\right) $$
+-
+
 # Documentation
 
 * https://www.geeksforgeeks.org/artificial-neural-networks-and-its-applications/
