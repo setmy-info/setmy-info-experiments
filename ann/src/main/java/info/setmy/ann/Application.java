@@ -42,7 +42,7 @@ public class Application {
                             .functionType(SIGMOID)
                             .build())
                     .add(LayerConfig.builder()
-                            .name("Output layer")
+                            .name("Output/Logits layer")
                             .size(groupedRecords.size())
                             .functionType(SOFTMAX)
                             .build())
