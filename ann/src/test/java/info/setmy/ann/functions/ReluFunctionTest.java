@@ -7,7 +7,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class ReluFunctionTest {
 
-    ActivationFunction relu;
+    ReluFunction relu;
 
     @Test
     void testReluFunction() {

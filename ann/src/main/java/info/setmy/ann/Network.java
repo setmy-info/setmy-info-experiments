@@ -46,6 +46,7 @@ public class Network {
                 .name(layerConfig.name())
                 .size(layerConfig.size())
                 .neurons(neurons)
+                .functionType(layerConfig.functionType())
                 // first layer output is null (it is set from train and test data every time again) and first input layer should not have function set.
                 // Other have to set it by number of neurons
                 .outputs(isInputLayer ? null : new double[layerConfig.size()])
@@ -65,9 +66,6 @@ public class Network {
             double bias = -1 + 2 * nextRandomDouble();
             neurons[i] = Neuron.builder()
                     .index(i)
-                    .activationFunction(
-                            functionType != null ? functionType.getActivationFunction() : null
-                    )
                     .weights(weights)
                     .bias(bias)
                     .build();
@@ -128,6 +126,7 @@ public class Network {
     }
 
     private void backward(PredictionResult record) {
+        // TODO: possible bug, need to fix
         double[] target = new double[outputLayer.getSize()];
         target[record.predictedClassIndex()] = 1.0;
 
@@ -135,7 +134,7 @@ public class Network {
         for (int i = 0; i < outputLayer.getSize(); i++) {
             Neuron neuron = outputLayer.getNeurons()[i];
             double error = target[i] - outputLayer.getOutputs()[i];
-            neuron.setDelta(error * neuron.getActivationFunction().func(outputLayer.getOutputs()[i]));
+            //neuron.setDelta(error * neuron.getActivationFunction().func(outputLayer.getOutputs()[i]));
         }
 
         // Backpropagate through hidden layers
@@ -148,7 +147,7 @@ public class Network {
                 for (Neuron nextNeuron : nextLayer.getNeurons()) {
                     sumError += nextNeuron.getWeights()[i] * nextNeuron.getDelta();
                 }
-                neuron.setDelta(sumError * neuron.getActivationFunction().func(currentLayer.getOutputs()[i]));
+                //neuron.setDelta(sumError * neuron.getActivationFunction().func(currentLayer.getOutputs()[i]));
             }
             currentLayer = currentLayer.getPrevious();
         }
@@ -167,6 +166,7 @@ public class Network {
     }
 
     private void evaluate(CSVRecord[] testData) {
+        // TODO: recheck
         int correct = 0;
         for (CSVRecord record : testData) {
             double[] output = forward(record.getNetworkInputData());

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import static info.setmy.ann.FunctionType.SIGMOID;
+import static info.setmy.ann.FunctionType.SOFTMAX;
 import static info.setmy.ann.utils.AllUtils.groupByClassType;
 import static info.setmy.ann.utils.AllUtils.printData;
 import static info.setmy.ann.utils.AllUtils.readAllRecords;
@@ -43,7 +44,7 @@ public class Application {
                     .add(LayerConfig.builder()
                             .name("Output layer")
                             .size(groupedRecords.size())
-                            .functionType(SIGMOID)
+                            .functionType(SOFTMAX)
                             .build())
                     .makeFinal();
 
