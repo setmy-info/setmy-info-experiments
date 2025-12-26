@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # MIT License
-# Copyright (c) 2017-2019 Imre Tabur <imre.tabur@eesti.ee>
+# Copyright (c) 2017-2019 Imre Tabur <imre.tabur@mail.ee>
 
 RELEASE=1.0.1
 VERSION_TAG=version-${RELEASE}

@@ -1,7 +1,7 @@
 /*!
  * MIT License
  *
- * Copyright (c) 2017-2019 Imre Tabur <imre.tabur@eesti.ee>
+ * Copyright (c) 2017-2019 Imre Tabur <imre.tabur@mail.ee>
  */
 "use strict";
 
