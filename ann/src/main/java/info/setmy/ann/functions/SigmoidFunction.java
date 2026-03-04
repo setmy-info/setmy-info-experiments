@@ -17,4 +17,9 @@ public final class SigmoidFunction implements ActivationFunction {
     double func(double input) {
         return 1.0 / (1.0 + exp(-input));
     }
+
+    @Override
+    public double derivative(double output) {
+        return output * (1.0 - output);
+    }
 }

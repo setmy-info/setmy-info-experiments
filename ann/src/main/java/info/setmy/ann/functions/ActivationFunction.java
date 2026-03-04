@@ -7,6 +7,8 @@ public interface ActivationFunction {
 
     double func(Layer layer, Neuron neuron);
 
+    double derivative(double output);
+
     default double sum(Layer layer, Neuron neuron) {
         return sum(
                 layer.getPrevious().getOutputs(),

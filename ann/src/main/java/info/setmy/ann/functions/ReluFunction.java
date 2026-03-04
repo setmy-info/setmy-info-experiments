@@ -17,4 +17,9 @@ public final class ReluFunction implements ActivationFunction {
     double func(double input) {
         return max(0, input);
     }
+
+    @Override
+    public double derivative(double output) {
+        return output > 0 ? 1.0 : 0.0;
+    }
 }

@@ -20,6 +20,11 @@ public final class SoftMaxFunction implements ActivationFunction {
         return exp(input);
     }
 
+    @Override
+    public double derivative(double output) {
+        return output * (1.0 - output);
+    }
+
     public void postUpdate(double[] output) {
         double sumExp = 0.0;
         for (int i = 0; i < output.length; i++) {

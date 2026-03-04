@@ -114,7 +114,7 @@ public class Network {
         backward(predictedResult);
     }
 
-    private double[] forward(double[] record) {
+    double[] forward(double[] record) {
         inputLayer.setOutputs(record);
         Layer currentLayer = inputLayer.getNext();//Starting from first (hidden layer)
         while (currentLayer != null) {// TODO : until pre-last. Last should be handled differently - SoftMAX.
@@ -126,15 +126,14 @@ public class Network {
     }
 
     private void backward(PredictionResult record) {
-        // TODO: possible bug, need to fix
+        // One-hot target from the actual class label (not the predicted one)
         double[] target = new double[outputLayer.getSize()];
-        target[record.predictedClassIndex()] = 1.0;
+        target[record.input().classType()] = 1.0;
 
-        // Compute output layer deltas
+        // Output layer deltas: SoftMax + cross-entropy combined gradient = output - target
         for (int i = 0; i < outputLayer.getSize(); i++) {
             Neuron neuron = outputLayer.getNeurons()[i];
-            double error = target[i] - outputLayer.getOutputs()[i];
-            //neuron.setDelta(error * neuron.getActivationFunction().func(outputLayer.getOutputs()[i]));
+            neuron.setDelta(outputLayer.getOutputs()[i] - target[i]);
         }
 
         // Backpropagate through hidden layers
@@ -147,19 +146,20 @@ public class Network {
                 for (Neuron nextNeuron : nextLayer.getNeurons()) {
                     sumError += nextNeuron.getWeights()[i] * nextNeuron.getDelta();
                 }
-                //neuron.setDelta(sumError * neuron.getActivationFunction().func(currentLayer.getOutputs()[i]));
+                double deriv = currentLayer.getFunctionType().getActivationFunction().derivative(currentLayer.getOutputs()[i]);
+                neuron.setDelta(sumError * deriv);
             }
             currentLayer = currentLayer.getPrevious();
         }
 
-        // Update weights and biases
+        // Update weights and biases (gradient descent: -= lr * delta * input)
         currentLayer = inputLayer.getNext();
         while (currentLayer != null) {
             for (Neuron neuron : currentLayer.getNeurons()) {
                 for (int j = 0; j < neuron.getWeights().length; j++) {
-                    neuron.getWeights()[j] += learningRate * neuron.getDelta() * currentLayer.getPrevious().getOutputs()[j];
+                    neuron.getWeights()[j] -= learningRate * neuron.getDelta() * currentLayer.getPrevious().getOutputs()[j];
                 }
-                neuron.setBias(neuron.getBias() + learningRate * neuron.getDelta());
+                neuron.setBias(neuron.getBias() - learningRate * neuron.getDelta());
             }
             currentLayer = currentLayer.getNext();
         }
